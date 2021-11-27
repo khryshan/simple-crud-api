@@ -1,0 +1,25 @@
+{
+  "name": "simple-crud-api",
+  "version": "1.0.0",
+  "description": "simple-crud-api",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khryshan/simple-crud-api.git"
+  },
+  "author": "Konstantin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/khryshan/simple-crud-api/issues"
+  },
+  "homepage": "https://github.com/khryshan/simple-crud-api#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
