@@ -3,7 +3,6 @@ const Router = require('./framework/Router');
 
 let persons = [];
 
-
 const router = new Router();
 
 router.get('/person', (req, res) => {
@@ -14,15 +13,15 @@ router.get('/person/:id', (req, res) => {
   const personId = req.personId;
 
   if (!uuidValidate(personId)) {
-    return res.send(400, 'invalid personId');
+    return res.send(400, {message: "Invalid personId"});
   }
  
   const searchResult = persons.filter(person => person.id === personId);
 
   if (searchResult.length !== 0) {
-    return res.send(200, searchResult);
+    return res.send(200, searchResult[0]);
   } else {
-    return res.send(404, "person didn\'t find");
+    return res.send(404, {message: "Person didn\'t find"});
   };
 });
 
@@ -30,7 +29,7 @@ router.post('/person', (req, res) => {
   const person = req.body;
   
   if (Object.keys(person).length === 0) {
-    return res.send(400, {message: 'body was empty'});
+    return res.send(400, {message: 'Body was empty'});
   };
   
   if (
@@ -38,7 +37,7 @@ router.post('/person', (req, res) => {
     !Object.hasOwn(person, 'age') ||
     !Object.hasOwn(person, 'hobbies')
   ) {
-    return res.send(400, {message: 'person\'s name, age and hobbies are required'});
+    return res.send(400, {message: 'Person\'s name, age and hobbies are required'});
   };
   const newPerson = { ...person, id: uuidv4() };
   persons.push(newPerson);
@@ -51,7 +50,7 @@ router.put('/person/:id', (req, res) => {
   let updatedPerson = {};
 
   if (!uuidValidate(personId)) {
-    return res.send(400, 'invalid personId');
+    return res.send(400, {message: 'Invalid personId'});
   };
 
   persons = persons.map(person => {
@@ -61,13 +60,15 @@ router.put('/person/:id', (req, res) => {
         ...newPersonData
       };
       return updatedPerson
+    } else {
+      return person;
     }
   });
 
   if (Object.keys(updatedPerson).length !== 0) {
     return res.send(200, updatedPerson);
   } else {
-    return res.send(404, "person didn\'t find");
+    return res.send(404, {message: 'Person didn\'t find'});
   };
 
 
@@ -78,7 +79,7 @@ router.delete('/person/:id', (req, res) => {
   let isDeleted = false;
 
   if (!uuidValidate(personId)) {
-    return res.send(400, 'invalid personId');
+    return res.send(400, {message: 'Invalid personId'});
   };
 
   persons = persons.filter(person => {
@@ -91,10 +92,12 @@ router.delete('/person/:id', (req, res) => {
   });
 
   if (isDeleted) {
-    return res.send(204, "person was delete");
+    return res.send(204, {message: 'Person was delete'});
   } else {
-    return res.send(404, "person didn\'t find");
+    return res.send(404, {message: 'Person didn\'t find'});
   };
 });
+
+
 
 module.exports = router;

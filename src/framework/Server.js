@@ -17,15 +17,15 @@ module.exports = class Server {
   }
 
   addRouter(router) {
-    Object.keys(router.endpoints).forEach(path => {
-      const endpoint = router.endpoints[path];
-      Object.keys(endpoint).forEach(method => {
-        this.emitter.on(this._getRouterMask(path, method), (req, res) => {
-          const handler = endpoint[method];
-          handler(req, res);
-        })
+      Object.keys(router.endpoints).forEach(path => {
+        const endpoint = router.endpoints[path];
+        Object.keys(endpoint).forEach(method => {
+          this.emitter.on(this._getRouterMask(path, method), (req, res) => {
+            const handler = endpoint[method];
+            handler(req, res);
+          })
+        });
       });
-    });
   }
 
   _createServer() {
@@ -33,21 +33,29 @@ module.exports = class Server {
       let body = '';
       
       req.on('data', (chunk) => {
-        body += chunk;
+          body += chunk;
       });
       
       
       req.on('end', () => {
-        if(body) {
-          req.body = JSON.parse(body);
-        }
-
-        this.middlewares.forEach(middleware => middleware(req, res));
-
-        const emitted = this.emitter.emit(this._getRouterMask(req.pathname, req.method), req, res);
-    
-        if (!emitted) {
-          res.end();
+        try{
+          if(body) {
+            req.body = JSON.parse(body);
+          }
+  
+          this.middlewares.forEach(middleware => middleware(req, res));
+  
+          const emitted = this.emitter.emit(this._getRouterMask(req.pathname, req.method), req, res);
+          
+          if (!emitted) {
+            res.send(404, {message: "Invalid form of url"});
+          }
+        } catch(err) {
+          res.writeHead(500, {
+            'Content-Type': 'application/json',
+          })
+          console.log(err.message);
+          res.end(JSON.stringify({error: err.message}));
         }
       });
     })

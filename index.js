@@ -11,7 +11,7 @@ const server = new Server();
 
 server.use(parserJson);
 // TODO: update baseURL
-server.use(parserUrl('http://localhost:8080/'));
+server.use(parserUrl(`http://localhost:${PORT}/`));
 
 server.addRouter(personRouter);
 server.listen(
