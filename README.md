@@ -7,7 +7,8 @@ This task is to implement simple CRUD API using in-memory database underneath.
 - then pass into the directory you just created
 - change branch from main to task-3_crud-api 
 - install all dependencies (`npm install` or `yarn install`)
-- run server (`npm start` or `yarn start`). Application will be available on http://localhost:8080
+- run server on dev mode (`npm run start:dev` or `yarn start:dev`). Application will be available on http://localhost:8080
+- run server on prod mode (`npm run start:prod` or `yarn start:prod`). Application will be available on http://localhost:8080
 
 ## Usage
 In order to test the application, you can use postman.
