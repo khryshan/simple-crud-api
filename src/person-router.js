@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4, validate: uuidValidate } = require('uuid');
 const Router = require('./framework/Router');
 
 const persons = [];
@@ -8,6 +8,22 @@ const router = new Router();
 
 router.get('/person', (req, res) => {
   return res.send(200, persons);
+});
+
+router.get('/person/:id', (req, res) => {
+  const personId = req.personId;
+
+  if (!uuidValidate(personId)) {
+    return res.send(400, 'invalid personId');
+  }
+ 
+  const searchResult = persons.filter(person => person.id === personId);
+
+  if (searchResult.length !== 0) {
+    return res.send(200, searchResult);
+  } else {
+    return res.send(404, "person didn\'t find");
+  };
 });
 
 router.post('/person', (req, res) => {
